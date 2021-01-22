@@ -15,6 +15,7 @@ p {
 
 span {
   font-size: 20px;
+  text-align: center;
 }
 
 
@@ -30,11 +31,9 @@ p {
 }
 
 .center {
-  margin: 0;
-  position: absolute;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .highlight {
