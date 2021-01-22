@@ -19,7 +19,9 @@ const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
 
-
+/*
+ * START LOGIC
+ */
 document.getElementById('start').addEventListener('click', () => {
   // get a quote
   const quoteIndex = Math.floor(Math.random() * quotes.length);
@@ -48,4 +50,43 @@ document.getElementById('start').addEventListener('click', () => {
 
   // Start the timer
   startTime = new Date().getTime();
+
+});
+
+/*
+ * TYPING LOGIC
+ */
+typedValueElement.addEventListener('input', () => {
+  // Get the current word
+  const currentWord = words[wordIndex];
+  // get the current value
+  const typedValue = typedValueElement.value;
+
+  if (typedValue === currentWord && wordIndex === words.length - 1) {
+    // end of sentence
+    // Display success
+    const elapsedTime = new Date().getTime() - startTime;
+    const message = `CONGRATULATIONS! You finished in ${elapsedTime / 1000} seconds.`;
+    messageElement.innerText = message;
+  } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
+    // end of word
+    // clear the typedValueElement for the new word
+    typedValueElement.value = '';
+    // move to the next word
+    wordIndex++;
+    // reset the class name for all elements in quote
+    for (const wordElement of quoteElement.childNodes) {
+      wordElement.className = '';
+    }
+    // highlight the new word
+    quoteElement.childNodes[wordIndex].className = 'highlight';
+  } else if (currentWord.startsWith(typedValue)) {
+    // currently correct
+    // highlight the next word
+    typedValueElement.className = '';
+  } else {
+    // error state
+    typedValueElement.className = 'error';
+  }
+
 });
