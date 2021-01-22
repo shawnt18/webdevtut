@@ -1,0 +1,43 @@
+/* inside style.css */
+html {
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+}
+
+
+h1 {
+  margin: 0;
+  padding: 10px 0;
+  color: #00539F;
+}
+
+p {
+  margin: 0;
+  padding: 5px 0;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.error {
+  background-color: lightcoral;
+  border: red;
+}
