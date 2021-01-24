@@ -18,11 +18,12 @@ let startTime = Date.now();
 const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
+const startElement = document.getElementById('start-button');
 
 /*
  * START LOGIC
  */
-document.getElementById('start').addEventListener('click', () => {
+function handleStartButtonEvent(event) {
   // get a quote
   const quoteIndex = Math.floor(Math.random() * quotes.length);
   const quote = quotes[quoteIndex];
@@ -46,12 +47,14 @@ document.getElementById('start').addEventListener('click', () => {
   typedValueElement.value = '';
   // set focus
   typedValueElement.focus();
-  // set the event handler
+  // TODO: set the event handler
 
   // Start the timer
   startTime = new Date().getTime();
+};
 
-});
+startElement.addEventListener('click', handleStartButtonEvent);
+
 
 /*
  * TYPING LOGIC
