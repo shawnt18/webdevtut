@@ -59,7 +59,7 @@ startElement.addEventListener('click', handleStartButtonEvent);
 /*
  * TYPING LOGIC
  */
-typedValueElement.addEventListener('input', () => {
+function handleTypeTextEvent(event) {
   // Get the current word
   const currentWord = words[wordIndex];
   // get the current value
@@ -91,5 +91,6 @@ typedValueElement.addEventListener('input', () => {
     // error state
     typedValueElement.className = 'error';
   }
+};
 
-});
+typedValueElement.addEventListener('input', handleTypeTextEvent);
