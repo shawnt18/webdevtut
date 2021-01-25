@@ -48,6 +48,7 @@ function handleStartButtonEvent(event) {
   // set focus
   typedValueElement.focus();
   // TODO: set the event handler
+  typedValueElement.disabled = false;
   typedValueElement.addEventListener('input', handleTypeTextEvent);
 
   // Start the timer
@@ -73,7 +74,9 @@ function handleTypeTextEvent(event) {
     const message = `CONGRATULATIONS! You finished in ${elapsedTime / 1000} seconds.`;
     messageElement.innerText = message;
     // disable text box
+	typedValueElement.disabled = true;
 	typedValueElement.removeEventListener('input', handleTypeTextEvent);
+
   } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
     // end of word
     // clear the typedValueElement for the new word
