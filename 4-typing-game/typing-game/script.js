@@ -1,4 +1,12 @@
 // inside script.js
+/////////////////
+// EXTRA IDEAS //
+// - 'Retry' option to attempt the last completed quote.
+// - localStorage for 'high scores' for each quote. 
+//	 User provides a 'name', which is saved alongside the completion time. 
+// - Usability: No 'start' button. 
+//	 User starts the game by interacting with the text box (e.g. pressing 'Enter' key).
+
 // all of our quotes
 const quotes = [
     'When you have eliminated the impossible, whatever remains, however improbable, must be the truth.',
@@ -47,7 +55,7 @@ function handleStartButtonEvent(event) {
   typedValueElement.value = '';
   // set focus
   typedValueElement.focus();
-  // TODO: set the event handler
+  // set the event handler
   typedValueElement.disabled = false;
   typedValueElement.addEventListener('input', handleTypeTextEvent);
 
