@@ -48,6 +48,7 @@ function handleStartButtonEvent(event) {
   // set focus
   typedValueElement.focus();
   // TODO: set the event handler
+  typedValueElement.addEventListener('input', handleTypeTextEvent);
 
   // Start the timer
   startTime = new Date().getTime();
@@ -71,6 +72,8 @@ function handleTypeTextEvent(event) {
     const elapsedTime = new Date().getTime() - startTime;
     const message = `CONGRATULATIONS! You finished in ${elapsedTime / 1000} seconds.`;
     messageElement.innerText = message;
+    // disable text box
+	typedValueElement.removeEventListener('input', handleTypeTextEvent);
   } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
     // end of word
     // clear the typedValueElement for the new word
@@ -93,4 +96,4 @@ function handleTypeTextEvent(event) {
   }
 };
 
-typedValueElement.addEventListener('input', handleTypeTextEvent);
+
