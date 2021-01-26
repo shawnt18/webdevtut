@@ -37,6 +37,14 @@ function init() {
 	}
 };
 
+// Rests local storage
+function reset(e) {
+	e.preventDefault();
+	//clear local storage for region only
+	localStorage.removeItem('regionName');
+	init();
+}
+
 // listeners
 form.addEventListener('submit', (e) => handleSubmit(e));
 clearBtn.addEventListener('click', (e) => reset(e));
