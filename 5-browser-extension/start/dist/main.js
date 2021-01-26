@@ -45,6 +45,23 @@ function reset(e) {
 	init();
 }
 
+// Setup user data in local storage
+function setUpUser(apiKey, regionName) {
+	localStorage.setItem('apiKey', apiKey);
+	localStorage.setItem('regionName', regionName);
+	loading.style.display = 'block';
+	errors.textContent = '';
+	clearBtn.style.display = 'block';
+	//make initial call
+	displayCarbonUsage(apiKey, regionName);
+}
+
+// Form submission
+function handleSubmit(e) {
+	e.preventDefault();
+	setUpUser(apiKey.value, region.value);
+}
+
 // listeners
 form.addEventListener('submit', (e) => handleSubmit(e));
 clearBtn.addEventListener('click', (e) => reset(e));
