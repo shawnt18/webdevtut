@@ -41,15 +41,18 @@ class Enemy extends GameObject {
 	}
 }
 
-function loadTexture(path) {
-	return new Promise((resolve) => {
-		const img = new Image();
-		img.src = path;
-		img.onload = () => {
-			resolve(img);
-		};
-	});
-}
+function createEnemies(ctx, canvas, enemyImg) {
+	const MONSTER_TOTAL = 5;
+	const MONSTER_WIDTH = MONSTER_TOTAL * 98;
+	const START_X = (canvas.width - MONSTER_WIDTH) / 2;
+	const STOP_X = START_X + MONSTER_WIDTH;
+
+	for (let x = START_X; x < STOP_X; x += 98) {
+		for (let y = 0; y < 50 * 5; y += 50) {
+			ctx.drawImage(enemyImg, x, y);
+		}
+	}
+};
 
 ////////////
 // EVENTS //
@@ -116,18 +119,17 @@ window.addEventListener("keyup", (evt) => {
 	}
 });
 
-function createEnemies(ctx, canvas, enemyImg) {
-	const MONSTER_TOTAL = 5;
-	const MONSTER_WIDTH = MONSTER_TOTAL * 98;
-	const START_X = (canvas.width - MONSTER_WIDTH) / 2;
-	const STOP_X = START_X + MONSTER_WIDTH;
-
-	for (let x = START_X; x < STOP_X; x += 98) {
-		for (let y = 0; y < 50 * 5; y += 50) {
-			ctx.drawImage(enemyImg, x, y);
-		}
-	}
-};
+///////////////
+// GAME LOOP //
+function loadTexture(path) {
+	return new Promise((resolve) => {
+		const img = new Image();
+		img.src = path;
+		img.onload = () => {
+			resolve(img);
+		};
+	});
+}
 
 window.onload = async () => {
 	canvas = document.getElementById('canvas');
