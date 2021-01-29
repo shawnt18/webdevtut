@@ -1,29 +1,11 @@
-// @ts-check
-class EventEmitter {
-	constructor() {
-		this.listeners = {};
-	}
-
-	on(message, listener) {
-		if (!this.listeners[message]) {
-			this.listeners[message] = [];
-		}
-		this.listeners[message].push(listener);
-	}
-
-	emit(message, payload = null) {
-		if (this.listeners[message]) {
-			this.listeners[message].forEach((l) => l(message, payload));
-		}
-	}
-}
-
+//////////////////
+// GAME OBJECTS //
 class GameObject {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
 		this.dead = false;
-		this.type = '';
+		this.type = "";
 		this.width = 0;
 		this.height = 0;
 		this.img = undefined;
@@ -59,33 +41,44 @@ class Enemy extends GameObject {
 	}
 }
 
-function loadTexture(path) {
-	return new Promise((resolve) => {
-		const img = new Image();
-		img.src = path;
-		img.onload = () => {
-			resolve(img);
-		};
-	});
+////////////
+// EVENTS //
+class EventEmitter {
+	constructor() {
+		this.listeners = {};
+	}
+
+	on(message, listener) {
+		if (!this.listeners[message]) {
+			this.listeners[message] = [];
+		}
+		this.listeners[message].push(listener);
+	}
+
+	emit(message, payload = null) {
+		if (this.listeners[message]) {
+			this.listeners[message].forEach((l) => l(message, payload));
+		}
+	}
 }
 
 const Messages = {
-	KEY_EVENT_UP: 'KEY_EVENT_UP',
-	KEY_EVENT_DOWN: 'KEY_EVENT_DOWN',
-	KEY_EVENT_LEFT: 'KEY_EVENT_LEFT',
-	KEY_EVENT_RIGHT: 'KEY_EVENT_RIGHT',
+	KEY_EVENT_UP: "KEY_EVENT_UP",
+	KEY_EVENT_DOWN: "KEY_EVENT_DOWN",
+	KEY_EVENT_LEFT: "KEY_EVENT_LEFT",
+	KEY_EVENT_RIGHT: "KEY_EVENT_RIGHT",
 };
 
+// Global objects
 let heroImg,
 	enemyImg,
 	laserImg,
-	canvas,
+	canvas, 
 	ctx,
 	gameObjects = [],
 	hero,
 	eventEmitter = new EventEmitter();
 
-// EVENTS
 let onKeyDown = function (e) {
 	console.log(e.keyCode);
 	switch (e.keyCode) {
@@ -98,23 +91,43 @@ let onKeyDown = function (e) {
 			break; // Space
 		default:
 			break; // do not block other keys
-	}
+	  }
 };
 
-window.addEventListener('keydown', onKeyDown);
+window.addEventListener("keydown", onKeyDown);
 
-// TODO make message driven
-window.addEventListener('keyup', (evt) => {
-	if (evt.key === 'ArrowUp') {
+window.addEventListener("keyup", (evt) => {
+	if (evt.key === "ArrowUp") {
 		eventEmitter.emit(Messages.KEY_EVENT_UP);
-	} else if (evt.key === 'ArrowDown') {
+	} else if (evt.key === "ArrowDown") {
 		eventEmitter.emit(Messages.KEY_EVENT_DOWN);
-	} else if (evt.key === 'ArrowLeft') {
+	} else if (evt.key === "ArrowLeft") {
 		eventEmitter.emit(Messages.KEY_EVENT_LEFT);
-	} else if (evt.key === 'ArrowRight') {
+	} else if (evt.key === "ArrowRight") {
 		eventEmitter.emit(Messages.KEY_EVENT_RIGHT);
 	}
 });
+
+///////////////
+// GAME LOOP //
+function loadTexture(path) {
+	return new Promise((resolve) => {
+		const img = new Image();
+		img.src = path;
+		img.onload = () => {
+			resolve(img);
+		};
+	});
+}
+
+function createHero() {
+	hero = new Hero(
+		canvas.width / 2 - 45,
+		canvas.height - canvas.height / 4
+	);
+	hero.img = heroImg;
+	gameObjects.push(hero);
+}
 
 function createEnemies() {
 	const MONSTER_TOTAL = 5;
@@ -129,52 +142,45 @@ function createEnemies() {
 			gameObjects.push(enemy);
 		}
 	}
-}
-
-function createHero() {
-	hero = new Hero(canvas.width / 2 - 45, canvas.height - canvas.height / 4);
-	hero.img = heroImg;
-	gameObjects.push(hero);
-}
-
-function drawGameObjects(ctx) {
-	gameObjects.forEach((go) => go.draw(ctx));
-}
+};
 
 function initGame() {
 	gameObjects = [];
-	createEnemies();
 	createHero();
+	createEnemies();
 
 	eventEmitter.on(Messages.KEY_EVENT_UP, () => {
 		hero.y -= 5;
 	});
-
 	eventEmitter.on(Messages.KEY_EVENT_DOWN, () => {
 		hero.y += 5;
 	});
-
 	eventEmitter.on(Messages.KEY_EVENT_LEFT, () => {
 		hero.x -= 5;
 	});
-
 	eventEmitter.on(Messages.KEY_EVENT_RIGHT, () => {
 		hero.x += 5;
 	});
 }
 
+function drawGameObjects(ctx) {
+	gameObjects.forEach(go => go.draw(ctx));
+}
+
 window.onload = async () => {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
+
+	// load textures
 	heroImg = await loadTexture('assets/player.png');
 	enemyImg = await loadTexture('assets/enemyShip.png');
 	laserImg = await loadTexture('assets/laserRed.png');
 
 	initGame();
 	let gameLoopId = setInterval(() => {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
 		ctx.fillStyle = 'black';
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fillRect(0,0, canvas.width, canvas.height);
 		drawGameObjects(ctx);
 	}, 100);
 };
