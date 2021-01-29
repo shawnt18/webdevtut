@@ -131,6 +131,25 @@ function loadTexture(path) {
 	});
 }
 
+function initGame() {
+	gameObjects = [];
+	createEnemies();
+	createHero();
+
+	eventEmitter.on(Messages.KEY_EVENT_UP, () => {
+		hero.y -= 5;
+	});
+	eventEmitter.on(Messages.KEY_EVENT_DOWN, () => {
+		hero.y += 5;
+	});
+	eventEmitter.on(Messages.KEY_EVENT_LEFT, () => {
+		hero.x -= 5;
+	});
+	eventEmitter.on(Messages.KEY_EVENT_RIGHT, () => {
+		hero.x += 5;
+	});
+}
+
 window.onload = async () => {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
@@ -138,17 +157,13 @@ window.onload = async () => {
 	// load textures
 	const heroImg = await loadTexture('assets/player.png');
 	const enemyImg = await loadTexture('assets/enemyShip.png');
+	const laserImg = await loadTexture('assets/laserRed.png');
 
-	// draw black background
-	ctx.fillStyle = 'black';
-	ctx.fillRect(0,0, 1024, 768); // x,y,width,height
-
-	// draw hero
-	ctx.drawImage(
-		heroImg,
-		canvas.width / 2 - 45, 
-		canvas.height - canvas.height / 4);
-
-	// draw enemies
-	createEnemies(ctx, canvas, enemyImg);
+	initGame();
+	let gameLoopId = setInterval(() => {
+		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0,0, canvas.width, canvas.height);
+		drawGameObjects(ctx);
+	}, 100);
 };
