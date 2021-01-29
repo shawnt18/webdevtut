@@ -12,7 +12,7 @@ class GameObject {
 	}
 
 	draw(ctx) {
-		ctx.drawImage(this.img, this.x, this,y, this.width, this.height);
+		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
 	}
 }
 
@@ -73,9 +73,10 @@ const Messages = {
 let heroImg,
 	enemyImg,
 	laserImg,
-	canvas, ctx,
-	gameObjects = [];
-let hero,
+	canvas, 
+	ctx,
+	gameObjects = [],
+	hero,
 	eventEmitter = new EventEmitter();
 
 let onKeyDown = function (e) {
@@ -162,14 +163,18 @@ function initGame() {
 	});
 }
 
+function drawGameObjects(ctx) {
+	gameObjects.forEach(go => go.draw(ctx));
+}
+
 window.onload = async () => {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 
 	// load textures
-	const heroImg = await loadTexture('assets/player.png');
-	const enemyImg = await loadTexture('assets/enemyShip.png');
-	const laserImg = await loadTexture('assets/laserRed.png');
+	heroImg = await loadTexture('assets/player.png');
+	enemyImg = await loadTexture('assets/enemyShip.png');
+	laserImg = await loadTexture('assets/laserRed.png');
 
 	initGame();
 	let gameLoopId = setInterval(() => {
