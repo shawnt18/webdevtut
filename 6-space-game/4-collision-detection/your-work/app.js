@@ -14,6 +14,24 @@ class GameObject {
 	draw(ctx) {
 		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
 	}
+
+	rectFromGameObject() {
+		return {
+			top: this.y,
+			left: this.x,
+			bottom: this.y + this.height,
+			right: this.x + this.width
+		};
+	}
+}
+
+function intersectRect(r1, r2) {
+	return !(
+		r2.left > r1.right ||
+		r2.right < r1.left ||
+		r2.top > r1.bottom ||
+		r2.bottom < r1.top
+	);
 }
 
 class Hero extends GameObject {
