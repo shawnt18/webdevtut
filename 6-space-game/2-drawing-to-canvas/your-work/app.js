@@ -1,3 +1,5 @@
+//////////////////
+// GAME OBJECTS //
 class GameObject {
 	constructor(x, y) {
 		this.x = x;
@@ -49,6 +51,71 @@ function loadTexture(path) {
 	});
 }
 
+////////////
+// EVENTS //
+class EventEmitter {
+	constructor() {
+		this.listeners = {};
+	}
+
+	on(message, listener) {
+		if (!this.listeners[message]) {
+			this.listeners[message] = [];
+		}
+		this.listeners[message].push(listener);
+	}
+
+	emit(message, payload = null) {
+		if (this.listeners[message]) {
+			this.listeners[message].forEach((l) => l(message, payload));
+		}
+	}
+}
+
+const Messages = {
+	KEY_EVENT_UP: "KEY_EVENT_UP",
+	KEY_EVENT_DOWN: "KEY_EVENT_DOWN",
+	KEY_EVENT_LEFT: "KEY_EVENT_LEFT",
+	KEY_EVENT_RIGHT: "KEY_EVENT_RIGHT",
+};
+
+let heroImg,
+	enemyImg,
+	laserImg,
+	canvas, ctx,
+	gameObjects = [],
+	hero,
+	eventEmitter = new EventEmitter();
+
+let onKeyDown = function (e) {
+	console.log(e.keyCode);
+	switch (e.keyCode) {
+		case 37:
+		case 39:
+		case 38:
+		case 40: // Arrow keys
+		case 32:
+			e.preventDefault();
+			break; // Space
+		default:
+			break; // do not block other keys
+	  }
+};
+
+window.addEventListener("keydown", onKeyDown);
+
+window.addEventListener("keyup", (evt) => {
+	if (evt.key === "ArrowUp") {
+		eventEmitter.emit(Messages.KEY_EVENT_UP);
+	} else if (evt.key === "ArrowDown") {
+		eventEmitter.emit(Messages.KEY_EVENT_DOWN);
+	} else if (evt.key === "ArrowLeft") {
+		eventEmitter.emit(Messages.KEY_EVENT_LEFT);
+	} else if (evt.key === "ArrowRight") {
+		eventEmitter.emit(Messages.KEY_EVENT_RIGHT);
+	}
+});
+
 function createEnemies(ctx, canvas, enemyImg) {
 	const MONSTER_TOTAL = 5;
 	const MONSTER_WIDTH = MONSTER_TOTAL * 98;
@@ -67,7 +134,7 @@ window.onload = async () => {
 	ctx = canvas.getContext('2d');
 
 	// load textures
-	const playerImg = await loadTexture('assets/player.png');
+	const heroImg = await loadTexture('assets/player.png');
 	const enemyImg = await loadTexture('assets/enemyShip.png');
 
 	// draw black background
@@ -76,7 +143,7 @@ window.onload = async () => {
 
 	// draw hero
 	ctx.drawImage(
-		playerImg, 
+		heroImg,
 		canvas.width / 2 - 45, 
 		canvas.height - canvas.height / 4);
 
