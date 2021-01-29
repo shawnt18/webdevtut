@@ -34,12 +34,46 @@ function intersectRect(r1, r2) {
 	);
 }
 
+class Laser extends GameObject {
+	constructor(x, y) {
+		super(x, y);
+		(this.width = 9), (this.height = 33);
+		this.type = 'Laser';
+		this.img = laserImg;
+		let id = setInterval(() => {
+			if (this.y > 0) {
+				this.y -= 15;
+			} else {
+				this.dead = true;
+				clearInterval(id);
+			}
+		}, 100)
+	}
+}
+
 class Hero extends GameObject {
 	constructor(x, y) {
 		super(x, y);
 		(this.width = 99), (this.height = 75);
 		this.type = 'Hero';
 		this.speed = { x: 0, y: 0 };
+		this.cooldown = 0;
+	}
+	
+	fire() {
+		gameObjects.push(new Laser(this.x + 45, this.y - 10));
+		this.cooldown = 500;
+		let id = setInterval(() => {
+			if (this.cooldown > 0) {
+				this.cooldown -= 100;
+			} else {
+				clearInterval(id);
+			}
+		}, 200);
+	}
+
+	canFire() {
+		return this.cooldown === 0;
 	}
 }
 
@@ -56,23 +90,6 @@ class Enemy extends GameObject {
 				clearInterval(id);
 			}
 		}, 300);
-	}
-}
-
-class Laser extends GameObject {
-	constructor(x, y) {
-		super(x, y);
-		(this.width = 9), (this.height = 33);
-		this.type = 'Laser';
-		this.img = laserImg;
-		let id = setInterval(() => {
-			if (this.y > 0) {
-				this.y -= 15;
-			} else {
-				this.dead = true;
-				clearInterval(id);
-			}
-		}, 100)
 	}
 }
 
