@@ -85,6 +85,9 @@ const Messages = {
 	KEY_EVENT_DOWN: "KEY_EVENT_DOWN",
 	KEY_EVENT_LEFT: "KEY_EVENT_LEFT",
 	KEY_EVENT_RIGHT: "KEY_EVENT_RIGHT",
+	KEY_EVENT_SPACE: "KEY_EVENT_SPACE",
+	COLLISION_ENEMY_LASER: "COLLISION_ENEMY_LASER",
+	COLLISION_ENEMY_HERO: "COLLISION_ENEMY_HERO",
 };
 
 // Global objects
@@ -123,6 +126,8 @@ window.addEventListener("keyup", (evt) => {
 		eventEmitter.emit(Messages.KEY_EVENT_LEFT);
 	} else if (evt.key === "ArrowRight") {
 		eventEmitter.emit(Messages.KEY_EVENT_RIGHT);
+	} else if (evt.keyCode === 32) {
+		eventEmitter.emit(Messages.KEY_EVENT_SPACE);
 	}
 });
 
@@ -178,6 +183,15 @@ function initGame() {
 	});
 	eventEmitter.on(Messages.KEY_EVENT_RIGHT, () => {
 		hero.x += 5;
+	});
+	eventEmitter.on(Messages.KEY_EVENT_SPACE, () => {
+		if (hero.canFire()) {
+			hero.fire();
+		}
+	});
+	eventEmitter.on(Messages.COLLISION_ENEMY_LASER, (_, { first, second }) => {
+		first.dead = true;
+		second.dead = true;
 	});
 }
 
