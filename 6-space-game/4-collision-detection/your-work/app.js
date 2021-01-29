@@ -216,6 +216,21 @@ function drawGameObjects(ctx) {
 	gameObjects.forEach(go => go.draw(ctx));
 }
 
+function updateGameObjects() {
+	const enemies = gameObjects.filter(go => go.type === 'Enemy');
+	const lasers = gameObjects.filter(go => go.type === 'Laser');
+	lasers.forEach((l) => {
+		enemies.forEach((m) => {
+			if (intersectRect(l.rectFromGameObject(), m.rectFromGameObject())) {
+				eventEmitter.emit(
+					Messages.COLLISION_ENEMY_LASER, { first: l, second: m }
+				);
+			}
+		});
+	});
+	gameObjects = gameObjects.filter(go => !go.dead);
+}
+
 window.onload = async () => {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
@@ -230,6 +245,7 @@ window.onload = async () => {
 		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0,0, canvas.width, canvas.height);
+		updateGameObjects();
 		drawGameObjects(ctx);
 	}, 100);
 };
