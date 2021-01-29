@@ -41,19 +41,6 @@ class Enemy extends GameObject {
 	}
 }
 
-function createEnemies(ctx, canvas, enemyImg) {
-	const MONSTER_TOTAL = 5;
-	const MONSTER_WIDTH = MONSTER_TOTAL * 98;
-	const START_X = (canvas.width - MONSTER_WIDTH) / 2;
-	const STOP_X = START_X + MONSTER_WIDTH;
-
-	for (let x = START_X; x < STOP_X; x += 98) {
-		for (let y = 0; y < 50 * 5; y += 50) {
-			ctx.drawImage(enemyImg, x, y);
-		}
-	}
-};
-
 ////////////
 // EVENTS //
 class EventEmitter {
@@ -82,12 +69,13 @@ const Messages = {
 	KEY_EVENT_RIGHT: "KEY_EVENT_RIGHT",
 };
 
+// Global objects
 let heroImg,
 	enemyImg,
 	laserImg,
 	canvas, ctx,
-	gameObjects = [],
-	hero,
+	gameObjects = [];
+let hero,
 	eventEmitter = new EventEmitter();
 
 let onKeyDown = function (e) {
@@ -130,6 +118,21 @@ function loadTexture(path) {
 		};
 	});
 }
+
+function createEnemies() {
+	const MONSTER_TOTAL = 5;
+	const MONSTER_WIDTH = MONSTER_TOTAL * 98;
+	const START_X = (canvas.width - MONSTER_WIDTH) / 2;
+	const STOP_X = START_X + MONSTER_WIDTH;
+
+	for (let x = START_X; x < STOP_X; x += 98) {
+		for (let y = 0; y < 50 * 5; y += 50) {
+			const enemy = new Enemy(x, y);
+			enemy.img = enemyImg;
+			gameObjects.push(enemy);
+		}
+	}
+};
 
 function initGame() {
 	gameObjects = [];
