@@ -119,6 +119,15 @@ function loadTexture(path) {
 	});
 }
 
+function createHero() {
+	hero = new Hero(
+		canvas.width / 2 - 45,
+		canvas.height - canvas.height / 4
+	);
+	hero.img = heroImg;
+	gameObjects.push(hero);
+}
+
 function createEnemies() {
 	const MONSTER_TOTAL = 5;
 	const MONSTER_WIDTH = MONSTER_TOTAL * 98;
@@ -136,8 +145,8 @@ function createEnemies() {
 
 function initGame() {
 	gameObjects = [];
-	createEnemies();
 	createHero();
+	createEnemies();
 
 	eventEmitter.on(Messages.KEY_EVENT_UP, () => {
 		hero.y -= 5;
