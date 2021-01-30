@@ -286,6 +286,15 @@ function initGame() {
 			eventEmitter.emit(Messages.GAME_END_WIN);
 		}
 	});
+
+	eventEmitter.on(Messages.GAME_END_WIN, () => {
+		endGame(true);
+	});
+
+	eventEmitter.on(Messages.GAME_END_LOSS, () => {
+		endGame(false);
+	});
+
 }
 
 function drawGameObjects(ctx) {
@@ -340,6 +349,10 @@ function drawLifes() {
 			START_POS + (45 * (i+1) ),
 			canvas.height - 37);
 	}
+}
+
+function endGame(win) {
+
 }
 
 window.onload = async () => {
