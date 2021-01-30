@@ -254,6 +254,10 @@ function initGame() {
 	eventEmitter.on(Messages.ENEMY_KILL, (_, {first} ) => {
 		first.dead = true;
 	});
+	eventEmitter.on(Messages.COLLISION_ENEMY_HERO, (_, { enemy }) => {
+		enemy.dead = true;
+		hero.decrementLife();
+	})
 }
 
 function drawGameObjects(ctx) {
