@@ -172,7 +172,8 @@ window.addEventListener("keydown", (evt) => {
 
 ///////////////
 // GAME LOOP //
-let heroImg,
+let gameLoopId,
+	heroImg,
 	enemyImg,
 	laserImg,
 	lifeImg,
@@ -351,15 +352,30 @@ function drawLifes() {
 	}
 }
 
-function displayMessage(message, color = "red") {
-	ctx.font = '30px Arial';
+function displayGameEndMessage(message, color = "red") {
+	ctx.font = '40px Arial';
 	ctx.fillStyle = color;
 	ctx.textAlign = "center";
 	ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+	let retryMsg = "Press [Enter] to restart";
+	ctx.fillText(retryMsg, canvas.width / 2, (canvas.height / 2) + 50);
 }
 
 function endGame(win) {
+	clearInterval(gameLoopId);
 
+	// set a delay so we are sure any paints have finished
+	setTimeout(() => {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		if (win) {
+			displayGameEndMessage("VICTORY!","green");
+		} else {
+			displayGameEndMessage("GAME OVER!");
+		}
+		drawPoints();
+	}, 200);
 }
 
 window.onload = async () => {
@@ -376,7 +392,7 @@ window.onload = async () => {
 	let pat = ctx.createPattern(starBackgroundImg, 'repeat');
 
 	initGame();
-	let gameLoopId = setInterval(() => {
+	gameLoopId = setInterval(() => {
 		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
 		ctx.fillStyle = pat;
 		ctx.fillRect(0,0, canvas.width, canvas.height);
