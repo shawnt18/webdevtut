@@ -267,18 +267,11 @@ function initGame() {
 		}
 	});
 
-	eventEmitter.on(Messages.ENEMY_KILL, (_, {first} ) => {
-		first.dead = true;
-		if (isEnemiesDead()) {
-			eventEmitter.emit(Messages.GAME_END_WIN);
-		}
-	});
-
 	eventEmitter.on(Messages.COLLISION_ENEMY_HERO, (_, { enemy }) => {
 		enemy.type = 'Explosion';
 		enemy.img = redExplosionImg;
-		enemy.x += (second.width - 56) / 2;
-		enemy.y += (second.height - 54) / 2;
+		enemy.x += (enemy.width - 56) / 2;
+		enemy.y += (enemy.height - 54) / 2;
 		enemy.width = 56;
 		enemy.height = 54;
 		hero.decrementLife();
@@ -286,7 +279,14 @@ function initGame() {
 			eventEmitter.emit(Messages.GAME_END_LOSS);
 			return;
 		}
-	})
+	});
+
+	eventEmitter.on(Messages.ENEMY_KILL, (_, {first} ) => {
+		first.dead = true;
+		if (isEnemiesDead()) {
+			eventEmitter.emit(Messages.GAME_END_WIN);
+		}
+	});
 }
 
 function drawGameObjects(ctx) {
@@ -315,7 +315,6 @@ function updateGameObjects() {
 		const heroRect = hero.rectFromGameObject();
 		if (intersectRect(heroRect, enemy.rectFromGameObject())) {
 			eventEmitter.emit(Messages.COLLISION_ENEMY_HERO, { enemy });
-			eventEmitter.emit(Messages.ENEMY_KILL, {first: enemy });
 		}
 	})
 
