@@ -84,6 +84,10 @@ class Hero extends GameObject {
 			this.dead = true;
 		}
 	}
+
+	incrementPoints() {
+		this.points += 100;
+	}
 }
 
 class Enemy extends GameObject {
