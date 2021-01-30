@@ -56,7 +56,7 @@ class Hero extends GameObject {
 		super(x, y);
 		(this.width = 99), (this.height = 75);
 		this.type = 'Hero';
-		this.speed = { x: 0, y: 0 };
+		this.speed = { x: 5, y: 5 };
 		this.cooldown = 0;
 		this.life = 3;
 		this.points = 0;
@@ -233,19 +233,19 @@ function initGame() {
 	createEnemies();
 
 	eventEmitter.on(Messages.KEY_EVENT_UP, () => {
-		hero.y -= 5;
+		hero.y -= hero.speed.y;
 	});
 
 	eventEmitter.on(Messages.KEY_EVENT_DOWN, () => {
-		hero.y += 5;
+		hero.y += hero.speed.y;
 	});
 
 	eventEmitter.on(Messages.KEY_EVENT_LEFT, () => {
-		hero.x -= 5;
+		hero.x -= hero.speed.x;
 	});
 
 	eventEmitter.on(Messages.KEY_EVENT_RIGHT, () => {
-		hero.x += 5;
+		hero.x += hero.speed.x;
 	});
 
 	eventEmitter.on(Messages.KEY_EVENT_SPACE, () => {
