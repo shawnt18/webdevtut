@@ -129,6 +129,7 @@ const Messages = {
 let heroImg,
 	enemyImg,
 	laserImg,
+	lifeImg,
 	canvas, 
 	ctx,
 	gameObjects = [],
@@ -264,15 +265,19 @@ function updateGameObjects() {
 	gameObjects = gameObjects.filter(go => !go.dead);
 }
 
-function drawPoints() {
+function drawText(message, x, y) {
 	ctx.font = '30px Arial';
 	ctx.fillStyle = 'red';
 	ctx.textAlign = 'left';
+	ctx.fillText(message, x, y);
+}
+
+function drawPoints() {
 	drawText('Points: ', 10, canvas.height - 20);
 }
 
-function drawText(message, x, y) {
-	ctx.fillText(message, x, y);
+function drawLifes() {
+	drawText('Lifes: ', 10, 40);
 }
 
 window.onload = async () => {
@@ -285,6 +290,7 @@ window.onload = async () => {
 	enemyImg = await loadTexture('assets/enemyShip.png');
 	laserImg = await loadTexture('assets/laserRed.png');
 	redExplosionImg = await loadTexture('assets/laserRedShot.png');
+	lifeImg = await loadTexture('assets/life.png');
 	let pat = ctx.createPattern(starBackgroundImg, 'repeat');
 
 	initGame();
@@ -293,6 +299,7 @@ window.onload = async () => {
 		ctx.fillStyle = pat;
 		ctx.fillRect(0,0, canvas.width, canvas.height);
 		drawPoints();
+		drawLifes();
 		updateGameObjects();
 		drawGameObjects(ctx);
 	}, 100);
