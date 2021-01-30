@@ -279,18 +279,24 @@ function updateGameObjects() {
 }
 
 function drawText(message, x, y) {
-	ctx.font = '30px Arial';
-	ctx.fillStyle = 'red';
-	ctx.textAlign = 'left';
 	ctx.fillText(message, x, y);
 }
 
 function drawPoints() {
+	ctx.font = '30px Arial';
+	ctx.fillStyle = 'red';
+	ctx.textAlign = 'left';
 	drawText('Points: ', 10, canvas.height - 20);
 }
 
 function drawLifes() {
-	drawText('Lifes: ', 10, 40);
+	const START_POS = canvas.width - 180;
+	for (let i = 0; i < hero.life; i++) {
+		ctx.drawImage(
+			lifeImg,
+			START_POS + (45 * (i+1) ),
+			canvas.height - 37);
+	}
 }
 
 window.onload = async () => {
