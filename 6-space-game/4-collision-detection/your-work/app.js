@@ -122,6 +122,7 @@ const Messages = {
 	KEY_EVENT_SPACE: "KEY_EVENT_SPACE",
 	COLLISION_ENEMY_LASER: "COLLISION_ENEMY_LASER",
 	COLLISION_ENEMY_HERO: "COLLISION_ENEMY_HERO",
+	ENEMY_KILL: "ENEMY_KILL",
 };
 
 // Global objects
@@ -224,8 +225,19 @@ function initGame() {
 		}
 	});
 	eventEmitter.on(Messages.COLLISION_ENEMY_LASER, (_, { first, second }) => {
+		if (!first.dead) {
+			first.dead = true;
+			// second.dead = true;
+			second.type = 'Explosion';
+			second.img = redExplosionImg;
+			second.x += (second.width - 56) / 2;
+			second.y += (second.height - 54) / 2;
+			second.width = 56;
+			second.height = 54;
+		}
+	});
+	eventEmitter.on(Messages.ENEMY_KILL, (_, {first} ) => {
 		first.dead = true;
-		second.dead = true;
 	});
 }
 
@@ -234,6 +246,10 @@ function drawGameObjects(ctx) {
 }
 
 function updateGameObjects() {
+	const explosions = gameObjects.filter(go => go.type === 'Explosion');
+	explosions.forEach((l) => {
+		eventEmitter.emit(Messages.ENEMY_KILL, {first: l});
+	})
 	const enemies = gameObjects.filter(go => go.type === 'Enemy');
 	const lasers = gameObjects.filter(go => go.type === 'Laser');
 	lasers.forEach((l) => {
