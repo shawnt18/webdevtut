@@ -155,9 +155,8 @@ let onKeyDown = function (e) {
 	  }
 };
 
-window.addEventListener("keydown", onKeyDown);
-
-window.addEventListener("keyup", (evt) => {
+window.addEventListener("keydown", (evt) => {
+	onKeyDown(evt);
 	if (evt.key === "ArrowUp") {
 		eventEmitter.emit(Messages.KEY_EVENT_UP);
 	} else if (evt.key === "ArrowDown") {
