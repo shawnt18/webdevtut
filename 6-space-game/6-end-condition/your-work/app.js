@@ -56,7 +56,7 @@ class Hero extends GameObject {
 		super(x, y);
 		(this.width = 99), (this.height = 75);
 		this.type = 'Hero';
-		this.speed = { x: 5, y: 5 };
+		this.speed = { x: 8, y: 10 };
 		this.cooldown = 0;
 		this.life = 3;
 		this.points = 0;
