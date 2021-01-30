@@ -134,6 +134,7 @@ const Messages = {
 	KEY_EVENT_LEFT: "KEY_EVENT_LEFT",
 	KEY_EVENT_RIGHT: "KEY_EVENT_RIGHT",
 	KEY_EVENT_SPACE: "KEY_EVENT_SPACE",
+	KEY_EVENT_ENTER: "KEY_EVENT_ENTER",
 	COLLISION_ENEMY_LASER: "COLLISION_ENEMY_LASER",
 	COLLISION_ENEMY_HERO: "COLLISION_ENEMY_HERO",
 	ENEMY_KILL: "ENEMY_KILL",
@@ -168,6 +169,8 @@ window.addEventListener("keydown", (evt) => {
 		eventEmitter.emit(Messages.KEY_EVENT_RIGHT);
 	} else if (evt.keyCode === 32) {
 		eventEmitter.emit(Messages.KEY_EVENT_SPACE);
+	} else if (evt.key === "Enter") {
+		eventEmitter.emit(Messages.KEY_EVENT_ENTER);
 	}
 });
 
@@ -297,6 +300,10 @@ function initGame() {
 		endGame(false);
 	});
 
+	eventEmitter.on(Messages.KEY_EVENT_ENTER, () => {
+		resetGame();
+	})
+
 }
 
 function drawGameObjects(ctx) {
@@ -364,7 +371,6 @@ function displayGameEndMessage(message, color = "red") {
 
 function endGame(win) {
 	clearInterval(gameLoopId);
-
 	// set a delay so we are sure any paints have finished
 	setTimeout(() => {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -377,6 +383,10 @@ function endGame(win) {
 		}
 		drawPoints();
 	}, 200);
+}
+
+function resetGame() {
+	
 }
 
 window.onload = async () => {
