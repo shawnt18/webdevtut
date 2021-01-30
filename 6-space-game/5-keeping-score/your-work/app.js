@@ -264,6 +264,17 @@ function updateGameObjects() {
 	gameObjects = gameObjects.filter(go => !go.dead);
 }
 
+function drawPoints() {
+	ctx.font = '30px Arial';
+	ctx.fillStyle = 'red';
+	ctx.textAlign = 'left';
+	drawText('Points: ', 10, canvas.height - 20);
+}
+
+function drawText(message, x, y) {
+	ctx.fillText(message, x, y);
+}
+
 window.onload = async () => {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
@@ -281,6 +292,7 @@ window.onload = async () => {
 		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
 		ctx.fillStyle = pat;
 		ctx.fillRect(0,0, canvas.width, canvas.height);
+		drawPoints();
 		updateGameObjects();
 		drawGameObjects(ctx);
 	}, 100);
