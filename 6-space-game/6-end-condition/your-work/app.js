@@ -216,6 +216,15 @@ function createEnemies() {
 	}
 };
 
+function isHeroDead() {
+	return hero.life <= 0;
+}
+
+function isEnemiesDead() {
+	const enemies = gameObjects.filter((go) => go.type === 'Enemy' && !go.dead);
+	return enemies.length === 0;
+}
+
 function initGame() {
 	gameObjects = [];
 	createHero();
