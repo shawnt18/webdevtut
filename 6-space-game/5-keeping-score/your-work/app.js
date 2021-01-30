@@ -58,6 +58,8 @@ class Hero extends GameObject {
 		this.type = 'Hero';
 		this.speed = { x: 0, y: 0 };
 		this.cooldown = 0;
+		this.life = 3;
+		this.points = 0;
 	}
 	
 	fire() {
