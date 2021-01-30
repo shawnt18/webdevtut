@@ -95,9 +95,10 @@ class Enemy extends GameObject {
 		super(x, y);
 		(this.width = 98), (this.height = 50);
 		this.type = 'Enemy';
+		this.speed = { x: 0, y: 3};
 		let id = setInterval(() => {
 			if (this.y < canvas.height - this.height) {
-				this.y += 5;
+				this.y += this.speed.y;
 			} else {
 				console.log('Stopped at', this.y);
 				clearInterval(id);
