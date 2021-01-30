@@ -253,14 +253,17 @@ window.onload = async () => {
 	ctx = canvas.getContext('2d');
 
 	// load textures
+	starBackgroundImg = await loadTexture('assets/starBackground.png');
 	heroImg = await loadTexture('assets/player.png');
 	enemyImg = await loadTexture('assets/enemyShip.png');
 	laserImg = await loadTexture('assets/laserRed.png');
+	redExplosionImg = await loadTexture('assets/laserRedShot.png');
+	let pat = ctx.createPattern(starBackgroundImg, 'repeat');
 
 	initGame();
 	let gameLoopId = setInterval(() => {
 		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
-		ctx.fillStyle = 'black';
+		ctx.fillStyle = pat;
 		ctx.fillRect(0,0, canvas.width, canvas.height);
 		updateGameObjects();
 		drawGameObjects(ctx);
