@@ -247,12 +247,14 @@ function drawGameObjects(ctx) {
 }
 
 function updateGameObjects() {
+	// DEAD ENEMY - EXPLOSION INTERACTION
+	const enemies = gameObjects.filter(go => go.type === 'Enemy');
+	const lasers = gameObjects.filter(go => go.type === 'Laser');
 	const explosions = gameObjects.filter(go => go.type === 'Explosion');
+	// LASER - ENEMY INTERACTION
 	explosions.forEach((l) => {
 		eventEmitter.emit(Messages.ENEMY_KILL, {first: l});
 	})
-	const enemies = gameObjects.filter(go => go.type === 'Enemy');
-	const lasers = gameObjects.filter(go => go.type === 'Laser');
 	lasers.forEach((l) => {
 		enemies.forEach((m) => {
 			if (intersectRect(l.rectFromGameObject(), m.rectFromGameObject())) {
@@ -262,6 +264,15 @@ function updateGameObjects() {
 			}
 		});
 	});
+	// HERO - ENEMY INTERACTION
+	enemies.forEach(enemy => {
+		const heroRect = hero.rectFromGameObject();
+		if (intersectRect(heroRect, enemy.rectFromGameObject())) {
+			eventEmitter.emit(Messages.COLLISION_ENEMY_HERO, { enemy });
+		}
+	})
+
+	// Remove all 'dead' objects
 	gameObjects = gameObjects.filter(go => !go.dead);
 }
 
