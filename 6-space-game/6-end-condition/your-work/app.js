@@ -351,6 +351,13 @@ function drawLifes() {
 	}
 }
 
+function displayMessage(message, color = "red") {
+	ctx.font = '30px Arial';
+	ctx.fillStyle = color;
+	ctx.textAlign = "center";
+	ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+}
+
 function endGame(win) {
 
 }
