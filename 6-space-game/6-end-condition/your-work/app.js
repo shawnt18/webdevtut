@@ -126,6 +126,10 @@ class EventEmitter {
 			this.listeners[message].forEach((l) => l(message, payload));
 		}
 	}
+
+	clear() {
+		this.listeners = {};
+	}
 }
 
 const Messages = {
@@ -183,6 +187,7 @@ let gameLoopId,
 	lifeImg,
 	canvas, 
 	ctx,
+	pat,
 	gameObjects = [],
 	hero,
 	eventEmitter = new EventEmitter();
@@ -386,7 +391,20 @@ function endGame(win) {
 }
 
 function resetGame() {
-	
+	if (gameLoopId) {
+		clearInterval(gameLoopId);
+		eventEmitter.clear();
+		initGame();
+		gameLoopId = setInterval(() => {
+			ctx.clearRect(0,0, canvas.width, canvas.height);
+			ctx.fillStyle = pat;
+			ctx.fillRect(0,0, canvas.width, canvas.height);
+			drawPoints();
+			drawLifes();
+			updateGameObjects();
+			drawGameObjects(ctx);
+		}, 100);
+	}
 }
 
 window.onload = async () => {
@@ -400,11 +418,11 @@ window.onload = async () => {
 	laserImg = await loadTexture('assets/laserRed.png');
 	redExplosionImg = await loadTexture('assets/laserRedShot.png');
 	lifeImg = await loadTexture('assets/life.png');
-	let pat = ctx.createPattern(starBackgroundImg, 'repeat');
+	pat = ctx.createPattern(starBackgroundImg, 'repeat');
 
 	initGame();
 	gameLoopId = setInterval(() => {
-		ctx.clearRect(0,0, canvas.width, canvas.height); // x,y,width,height
+		ctx.clearRect(0,0, canvas.width, canvas.height);
 		ctx.fillStyle = pat;
 		ctx.fillRect(0,0, canvas.width, canvas.height);
 		drawPoints();
