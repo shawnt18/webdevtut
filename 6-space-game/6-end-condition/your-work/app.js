@@ -136,6 +136,8 @@ const Messages = {
 	COLLISION_ENEMY_LASER: "COLLISION_ENEMY_LASER",
 	COLLISION_ENEMY_HERO: "COLLISION_ENEMY_HERO",
 	ENEMY_KILL: "ENEMY_KILL",
+	GAME_END_WIN: "GAME_END_WIN",
+	GAME_END_LOSS: "GAME_END_LOSS"
 };
 
 let onKeyDown = function (e) {
@@ -233,24 +235,28 @@ function initGame() {
 	eventEmitter.on(Messages.KEY_EVENT_UP, () => {
 		hero.y -= 5;
 	});
+
 	eventEmitter.on(Messages.KEY_EVENT_DOWN, () => {
 		hero.y += 5;
 	});
+
 	eventEmitter.on(Messages.KEY_EVENT_LEFT, () => {
 		hero.x -= 5;
 	});
+
 	eventEmitter.on(Messages.KEY_EVENT_RIGHT, () => {
 		hero.x += 5;
 	});
+
 	eventEmitter.on(Messages.KEY_EVENT_SPACE, () => {
 		if (hero.canFire()) {
 			hero.fire();
 		}
 	});
+
 	eventEmitter.on(Messages.COLLISION_ENEMY_LASER, (_, { first, second }) => {
 		if (!first.dead) {
 			first.dead = true;
-			// second.dead = true;
 			second.type = 'Explosion';
 			second.img = redExplosionImg;
 			second.x += (second.width - 56) / 2;
@@ -260,12 +266,26 @@ function initGame() {
 			hero.incrementPoints();
 		}
 	});
+
 	eventEmitter.on(Messages.ENEMY_KILL, (_, {first} ) => {
 		first.dead = true;
+		if (isEnemiesDead()) {
+			eventEmitter.emit(Messages.GAME_END_WIN);
+		}
 	});
+
 	eventEmitter.on(Messages.COLLISION_ENEMY_HERO, (_, { enemy }) => {
-		enemy.dead = true;
+		enemy.type = 'Explosion';
+		enemy.img = redExplosionImg;
+		enemy.x += (second.width - 56) / 2;
+		enemy.y += (second.height - 54) / 2;
+		enemy.width = 56;
+		enemy.height = 54;
 		hero.decrementLife();
+		if (isHeroDead()) {
+			eventEmitter.emit(Messages.GAME_END_LOSS);
+			return;
+		}
 	})
 }
 
@@ -274,11 +294,10 @@ function drawGameObjects(ctx) {
 }
 
 function updateGameObjects() {
-	// DEAD ENEMY - EXPLOSION INTERACTION
 	const enemies = gameObjects.filter(go => go.type === 'Enemy');
 	const lasers = gameObjects.filter(go => go.type === 'Laser');
 	const explosions = gameObjects.filter(go => go.type === 'Explosion');
-	// LASER - ENEMY INTERACTION
+	// DEAD ENEMY - EXPLOSION INTERACTION
 	explosions.forEach((l) => {
 		eventEmitter.emit(Messages.ENEMY_KILL, {first: l});
 	})
@@ -291,11 +310,12 @@ function updateGameObjects() {
 			}
 		});
 	});
-	// HERO - ENEMY INTERACTION
+	// HERO - ENEMY - EXPLOSION INTERACTION
 	enemies.forEach(enemy => {
 		const heroRect = hero.rectFromGameObject();
 		if (intersectRect(heroRect, enemy.rectFromGameObject())) {
 			eventEmitter.emit(Messages.COLLISION_ENEMY_HERO, { enemy });
+			eventEmitter.emit(Messages.ENEMY_KILL, {first: enemy });
 		}
 	})
 
