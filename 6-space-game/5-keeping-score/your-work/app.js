@@ -77,6 +77,13 @@ class Hero extends GameObject {
 	canFire() {
 		return this.cooldown === 0;
 	}
+
+	decrementLife() {
+		this.life--;
+		if (this.life === 0) {
+			this.dead = true;
+		}
+	}
 }
 
 class Enemy extends GameObject {
