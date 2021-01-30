@@ -138,17 +138,6 @@ const Messages = {
 	ENEMY_KILL: "ENEMY_KILL",
 };
 
-// Global objects
-let heroImg,
-	enemyImg,
-	laserImg,
-	lifeImg,
-	canvas, 
-	ctx,
-	gameObjects = [],
-	hero,
-	eventEmitter = new EventEmitter();
-
 let onKeyDown = function (e) {
 	console.log(e.keyCode);
 	switch (e.keyCode) {
@@ -182,6 +171,17 @@ window.addEventListener("keyup", (evt) => {
 
 ///////////////
 // GAME LOOP //
+let heroImg,
+	enemyImg,
+	laserImg,
+	lifeImg,
+	canvas, 
+	ctx,
+	gameObjects = [],
+	hero,
+	eventEmitter = new EventEmitter();
+
+
 function loadTexture(path) {
 	return new Promise((resolve) => {
 		const img = new Image();
@@ -248,6 +248,7 @@ function initGame() {
 			second.y += (second.height - 54) / 2;
 			second.width = 56;
 			second.height = 54;
+			hero.incrementPoints();
 		}
 	});
 	eventEmitter.on(Messages.ENEMY_KILL, (_, {first} ) => {
@@ -297,7 +298,7 @@ function drawPoints() {
 	ctx.font = '30px Arial';
 	ctx.fillStyle = 'red';
 	ctx.textAlign = 'left';
-	drawText('Points: ', 10, canvas.height - 20);
+	drawText('Points: ' + hero.points, 10, canvas.height - 20);
 }
 
 function drawLifes() {
