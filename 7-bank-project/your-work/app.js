@@ -3,11 +3,6 @@ const routes = {
 	'/dashboard': { templateId: 'dashboard' },
 };
 
-function navigate(path) {
-	window.history.pushState({}, path, window.location.origin + path);
-	updateRoute();
-}
-
 function updateRoute() {
 	const path = window.location.pathname;
 	console.log(path);
@@ -24,3 +19,7 @@ function updateRoute() {
 	app.appendChild(view);
 }
 
+function navigate(path) {
+	window.history.pushState({}, path, window.location.origin + path);
+	updateRoute();
+}
