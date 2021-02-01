@@ -23,3 +23,10 @@ function navigate(path) {
 	window.history.pushState({}, path, window.location.origin + path);
 	updateRoute();
 }
+
+function onLinkClick(event) {
+  event.preventDefault();
+  navigate(event.target.href);
+}
+
+updateRoute();
