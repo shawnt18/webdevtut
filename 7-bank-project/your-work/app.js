@@ -69,6 +69,11 @@ async function createAccount(account) {
 }
 
 // DASHBOARD
+function logout() {
+	updateState('account', null);
+	navigate('/login');
+}
+
 function createTransactionRow(transaction) {
 	const template = document.getElementById('transaction');
 	const transactionRow = template.content.cloneNode(true);
@@ -82,7 +87,7 @@ function createTransactionRow(transaction) {
 function updateDashboard() {
 	const account = state.account;
 	if (!account) {
-		return navigate('/login');
+		return logout();
 	}
 	updateElement('description', account.description);
 	updateElement('balance', account.balance.toFixed(2));
