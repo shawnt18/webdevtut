@@ -1,5 +1,11 @@
 let account = null;
 
+function updateElement(id, text) {
+	const element = document.getElementById(id);
+	element.textContent = text;
+}
+
+
 // LOGIN
 async function login() {
 	const loginForm = document.getElementById('loginForm');
@@ -7,7 +13,7 @@ async function login() {
 	const data = await getAccount(user);
 
 	if (data.error) {
-		return console.log('loginError', data.error);
+		return updateElement('loginError', data.error);
 	}
 
 	account = data;
@@ -37,7 +43,7 @@ async function register() {
 
 	console.log('Account created!', result);
 	account = result;
-	navigate('dashboard');
+	navigate('/dashboard');
 }
 
 async function createAccount(account) {
