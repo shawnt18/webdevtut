@@ -1,13 +1,19 @@
-let state = {
+let state = Object.freeze({
 	account: null
-};
+});
+
+function updateState(property, newData) {
+	state = Object.freeze({
+		...state,
+		[property]: newData
+	});
+}
 
 function updateElement(id, textOrNode) {
 	const element = document.getElementById(id);
 	element.textContent = "";
 	element.append(textOrNode);
 }
-
 
 // LOGIN
 async function login() {
@@ -19,7 +25,7 @@ async function login() {
 		return updateElement('loginError', data.error);
 	}
 
-	state.account = data;
+	updateState('account', data);
 	navigate('/dashboard');
 }
 
@@ -45,7 +51,7 @@ async function register() {
 	}
 
 	console.log('Account created!', result);
-	state.account = result;
+	updateState('account', result);
 	navigate('/dashboard');
 }
 
