@@ -59,10 +59,20 @@ async function createAccount(account) {
 	}
 }
 
+// DASHBOARD
+function updateDashboard() {
+	if (!account) {
+		return navigate('login');
+	}
+	updateElement('description', account.description);
+	updateElement('balance', account.balance.toFixed(2));
+	updateElement('currency', account.currency);
+}
+
 // ROUTING
 const routes = {
 	'/login': { templateId: 'login' },
-	'/dashboard': { templateId: 'dashboard' },
+	'/dashboard': { templateId: 'dashboard', init: updateDashboard },
 };
 
 function updateRoute() {
@@ -79,6 +89,10 @@ function updateRoute() {
 	const app = document.getElementById('app');
 	app.innerHTML = '';
 	app.appendChild(view);
+
+	if (typeof route.init === 'function') {
+		route.init();
+	}
 }
 
 function navigate(path) {
