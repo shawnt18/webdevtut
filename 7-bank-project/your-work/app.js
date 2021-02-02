@@ -142,5 +142,14 @@ function onLinkClick(event) {
   navigate(event.target.href);
 }
 
-window.onpopstate = () => updateRoute();
-updateRoute();
+function init() {
+	const savedAccount = localStorage.getItem(storageKey);
+	if (savedAccount) {
+		updateState('account', JSON.parse(savedAccount));
+	}
+
+	window.onpopstate = () => updateRoute();
+	updateRoute();
+}
+
+init();
