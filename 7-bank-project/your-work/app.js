@@ -118,7 +118,7 @@ function updateRoute() {
 	const route = routes[path];
 
 	if (!route) {
-		return navigate('/login');
+		return navigate('/dashboard');
 	}	
 
 	const template = document.getElementById(route.templateId);
