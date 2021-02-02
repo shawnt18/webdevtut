@@ -1,4 +1,6 @@
-let account = null;
+let state = {
+	account: null
+};
 
 function updateElement(id, textOrNode) {
 	const element = document.getElementById(id);
@@ -17,7 +19,7 @@ async function login() {
 		return updateElement('loginError', data.error);
 	}
 
-	account = data;
+	state.account = data;
 	navigate('/dashboard');
 }
 
@@ -43,7 +45,7 @@ async function register() {
 	}
 
 	console.log('Account created!', result);
-	account = result;
+	state.account = result;
 	navigate('/dashboard');
 }
 
@@ -72,8 +74,9 @@ function createTransactionRow(transaction) {
 }
 
 function updateDashboard() {
+	const account = state.account;
 	if (!account) {
-		return navigate('login');
+		return navigate('/login');
 	}
 	updateElement('description', account.description);
 	updateElement('balance', account.balance.toFixed(2));
