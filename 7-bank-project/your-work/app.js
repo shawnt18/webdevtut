@@ -2,11 +2,15 @@ let state = Object.freeze({
 	account: null
 });
 
+const storageKey = 'savedAccount';
+
 function updateState(property, newData) {
 	state = Object.freeze({
 		...state,
 		[property]: newData
 	});
+
+	localStorage.setItem(storageKey, JSON.stringify(state.account));
 }
 
 function updateElement(id, textOrNode) {
