@@ -36,6 +36,8 @@ async function register() {
 	}
 
 	console.log('Account created!', result);
+	account = result;
+	navigate('dashboard');
 }
 
 async function createAccount(account) {
