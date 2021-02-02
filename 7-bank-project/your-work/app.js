@@ -109,7 +109,7 @@ function updateDashboard() {
 // ROUTING
 const routes = {
 	'/login': { templateId: 'login' },
-	'/dashboard': { templateId: 'dashboard', init: updateDashboard },
+	'/dashboard': { templateId: 'dashboard', init: refresh },
 };
 
 function updateRoute() {
@@ -140,6 +140,25 @@ function navigate(path) {
 function onLinkClick(event) {
   event.preventDefault();
   navigate(event.target.href);
+}
+
+async function updateAccountData() {
+	const account = state.account;
+	if (!account) {
+		return logout();
+	}
+
+	const data = await getAccount(account.user);
+	if (data.error) {
+		return logout();
+	}
+
+	updateState('account', data);
+}
+
+async function refresh() {
+	await updateAccountData();
+	updateDashboard();
 }
 
 function init() {
